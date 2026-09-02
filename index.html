@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#fdf0f3">
+  <meta name="description" content="Invitación a los XV años de Aidee Samay Erazo Guato · Sábado 10 de octubre de 2026">
+  <title>XV Años · Aidee Samay Erazo Guato</title>
+  
+  <!-- Tipografías de Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Allura&family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Great+Vibes&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Pinyon+Script&display=swap" rel="stylesheet">
+  
+  <!-- Estilos principales -->
+  <link rel="stylesheet" href="styles.css?v=7">
+</head>
+<body>
+
+  <!-- ============ INTRO: SOBRE INTERACTIVO ============ -->
+  <div class="intro" id="intro" aria-hidden="false">
+    <div class="intro-glow"></div>
+    <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Abrir invitación">
+      <div class="env-letter">
+        <img class="env-crown" src="assets/corona.png" alt="Corona real">
+        <span class="env-name">Aidee Samay</span>
+        <span class="env-xv">XV Años</span>
+      </div>
+      <div class="env-front"></div>
+      <div class="env-flap"></div>
+      <div class="env-seal">
+        <img src="assets/corona.png" alt="Sello real">
+      </div>
+    </div>
+    <p class="intro-hint">Toca para abrir</p>
+    <div class="intro-video" id="introVideo" aria-hidden="true">
+      <video id="introVideoEl" src="assets/video-intro.mp4?v=7" playsinline preload="auto"></video>
+    </div>
+  </div>
+
+  <!-- ============ EFECTOS FLOTANTES ============ -->
+  <div class="sparkle-field" aria-hidden="true"></div>
+  <div class="flutter" aria-hidden="true">
+    <img class="fly fly-1" src="assets/mariposa.png" alt="">
+    <img class="fly fly-2" src="assets/mariposa.png" alt="">
+    <img class="fly fly-3" src="assets/mariposa.png" alt="">
+  </div>
+
+  <!-- ============ CONTENEDOR PRINCIPAL ============ -->
+  <main class="stage">
+
+    <!-- ============ 1 · PORTADA / HERO ============ -->
+    <section class="slide slide-hero" id="portada">
+      <div class="bg bg-hero"></div>
+      <div class="slide-inner">
+        <img class="hero-crown" src="assets/corona.png" alt="Corona">
+        <p class="kicker reveal">Con la bendición de Dios</p>
+
+        <h1 class="hero-name reveal">Aidee Samay</h1>
+        <h2 class="hero-last reveal chars">Erazo Guato</h2>
+        
+        <p class="hero-invite-line reveal chars">Te invita a celebrar</p>
+
+        <!-- Header de Mis XV Años con ornamentos -->
+        <div class="xv-badge-wrap reveal">
+          <span class="xv-flourish">~</span>
+          <span class="xv-badge-text">SUS XV AÑOS</span>
+          <span class="xv-flourish">~</span>
+        </div>
+
+        <!-- Divisor dorado con corazón estilo tarjeta de referencia -->
+        <div class="divider-gold-heart reveal">
+          <span class="d-line"></span>
+          <span class="d-heart">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-heart"/></svg>
+          </span>
+          <span class="d-line"></span>
+        </div>
+        
+        <!-- Indicador animado de deslizamiento -->
+        <div class="scroll-cue reveal" aria-hidden="true">
+          <span class="scroll-cue-txt">Desliza para continuar</span>
+          <svg class="scroll-cue-ic" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M7 10l5 5 5-5"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 2 · PRESENTACIÓN ============ -->
+    <section class="slide slide-present" id="presentacion">
+      <div class="bg bg-present"></div>
+      <img class="guirnalda" src="assets/guirnalda.png" alt="Guirnalda floral">
+      <div class="slide-inner">
+        <p class="kicker reveal">Queridos amigos y familiares</p>
+        <p class="present-body reveal">Con inmensa alegría, deseo compartir un día muy especial junto a las personas que más quiero. Los invito a acompañarme en la celebración de mis XV años.</p>
+        <p class="present-name reveal">Aidee Samay</p>
+        <p class="present-last reveal chars">Erazo Guato</p>
+        <div class="divider-gold-heart reveal">
+          <span class="d-line"></span>
+          <span class="d-heart">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-heart"/></svg>
+          </span>
+          <span class="d-line"></span>
+        </div>
+        <p class="present-tag reveal chars">Mis XV Años</p>
+      </div>
+    </section>
+
+    <!-- ============ 2.5 · FRASE ============ -->
+    <section class="slide slide-quote" id="frase">
+      <div class="bg bg-quote"></div>
+      <div class="slide-inner">
+        <img class="quote-rose" src="assets/rosa.png" alt="Rosa">
+        <p class="kicker reveal">Una nueva etapa comienza</p>
+        <p class="quote-text reveal chars">"Quince años de sueños, amor y esperanza que hoy se hacen realidad."</p>
+        <p class="quote-author reveal">Aidee Samay</p>
+      </div>
+    </section>
+
+    <!-- ============ 3 · FAMILIA (PADRES Y PADRINOS) ============ -->
+    <section class="slide slide-family" id="familia">
+      <div class="bg bg-family"></div>
+      <div class="slide-inner">
+        <p class="kicker reveal">Con la bendición de mi familia</p>
+        
+        <div class="family-grid">
+          <!-- Mis Padres -->
+          <div class="family-card reveal">
+            <img class="fam-ic" src="assets/rosa.png" alt="Rosa">
+            <p class="fam-group-title">Mis Padres</p>
+            <div class="fam-group-content">
+              <div class="fam-person">
+                <p class="fam-role">Papá</p>
+                <p class="fam-name">Edison Erazo</p>
+              </div>
+              <div class="fam-divider-sub"></div>
+              <div class="fam-person">
+                <p class="fam-role">Mamá</p>
+                <p class="fam-name">Gisela Guato</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mis Padrinos -->
+          <div class="family-card reveal">
+            <img class="fam-ic" src="assets/rosa.png" alt="Rosa">
+            <p class="fam-group-title">Mis Padrinos</p>
+            <div class="fam-group-content">
+              <div class="fam-person">
+                <p class="fam-role">Padrino</p>
+                <p class="fam-name">Lic. Abel Guaylla</p>
+              </div>
+              <div class="fam-divider-sub"></div>
+              <div class="fam-person">
+                <p class="fam-role">Madrina</p>
+                <p class="fam-name">Lic. Ana Orna</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="family-note reveal">Los llevo siempre en mi corazón</p>
+      </div>
+    </section>
+
+    <!-- ============ 4 · FOTO DE LA QUINCEAÑERA ============ -->
+    <section class="slide slide-invite" id="invitado">
+      <div class="bg bg-invite"></div>
+      <div class="slide-inner">
+        <p class="kicker reveal">Con la ilusión de mis 15 años</p>
+        <p class="invite-big reveal chars">¡Acompáñame!</p>
+        
+        <div class="portrait-wrap reveal">
+          <div class="portrait-frame">
+            <img class="portrait-img" id="portraitImg" src="assets/foto-quinceanera.jpg" alt="Aidee Samay" onerror="this.classList.add('no-photo')">
+            <div class="portrait-mono">A S</div>
+          </div>
+        </div>
+
+        <p class="invite-line reveal">Mi corazón se llena de alegría al saber que estarás a mi lado en este día tan especial.</p>
+        <p class="invite-signature reveal">Aidee Samay</p>
+      </div>
+    </section>
+
+    <!-- ============ 5 · FECHA Y HORA (SÁBADO 10 DE OCTUBRE) ============ -->
+    <section class="slide slide-date" id="fecha">
+      <div class="bg bg-date"></div>
+      <div class="slide-inner">
+        <img class="hero-crown crown-small reveal" src="assets/corona.png" alt="Corona">
+        <p class="kicker reveal">Sábado</p>
+        <p class="date-day reveal">10</p>
+        <p class="date-month reveal chars">de Octubre</p>
+        <div class="date-hour reveal"><span class="chars">11:00</span><small>AM</small></div>
+        <p class="date-label reveal">Ceremonia Religiosa</p>
+        <div class="countdown reveal" id="countdown">
+          <div class="cd-cell"><span class="cd-num" id="cdDays">00</span><span class="cd-lab">Días</span></div>
+          <div class="cd-cell"><span class="cd-num" id="cdHours">00</span><span class="cd-lab">Horas</span></div>
+          <div class="cd-cell"><span class="cd-num" id="cdMins">00</span><span class="cd-lab">Min</span></div>
+          <div class="cd-cell"><span class="cd-num" id="cdSecs">00</span><span class="cd-lab">Seg</span></div>
+        </div>
+        <p class="date-year reveal chars">2026</p>
+      </div>
+    </section>
+
+    <!-- ============ 6 · UBICACIÓN (CEREMONIA Y RECEPCIÓN) ============ -->
+    <section class="slide slide-venue" id="ubicacion">
+      <div class="bg bg-venue"></div>
+      <div class="slide-inner">
+        <p class="kicker reveal">Ubicación</p>
+
+        <!-- Ceremonia Religiosa -->
+        <div class="venue-card reveal">
+          <img class="pin" src="assets/pin.png" alt="Ubicación">
+          <p class="venue-kind">Ceremonia · 11:00 AM</p>
+          <p class="venue-name">Basílica del Sagrado Corazón de Jesús</p>
+          <p class="venue-addr">Riobamba, Chimborazo</p>
+          <a class="btn-ghost" href="https://maps.app.goo.gl/TUVDWo4fPiu39P2U8" target="_blank" rel="noopener">Ver en el mapa</a>
+        </div>
+
+        <!-- Recepción / Fiesta -->
+        <div class="venue-card reveal">
+          <img class="pin" src="assets/pin.png" alt="Ubicación">
+          <p class="venue-kind">Recepción · 13:00 PM</p>
+          <p class="venue-name">Colegio de Ingenieros Agrónomos de Chimborazo</p>
+          <p class="venue-addr">Riobamba, Chimborazo</p>
+          <a class="btn-ghost" href="https://maps.app.goo.gl/H3J4o2mh7oU6wHxf9" target="_blank" rel="noopener">Ver en el mapa</a>
+        </div>
+
+        <p class="venue-note reveal">Será un honor contar con su presencia</p>
+      </div>
+    </section>
+
+    <!-- ============ 7 · CÓDIGO DE VESTIMENTA ============ -->
+    <section class="slide slide-dress" id="vestimenta">
+      <div class="bg bg-dress"></div>
+      <div class="slide-inner">
+        <img class="hero-crown crown-small reveal" src="assets/corona.png" alt="Corona">
+        <p class="kicker reveal">Código de vestimenta</p>
+        <div class="couple reveal" aria-hidden="true">
+          <img src="assets/pareja.png" alt="Pareja elegante">
+        </div>
+        <p class="dress-script reveal chars">Ellas hermosas</p>
+        <p class="dress-script reveal chars">&amp;</p>
+        <p class="dress-script reveal chars">ellos guapos</p>
+        <p class="dress-note reveal">Traje Formal / Rigurosa Etiqueta</p>
+      </div>
+    </section>
+
+    <!-- ============ 8 · REGALOS / LLUVIA DE SOBRES ============ -->
+    <section class="slide slide-gifts" id="regalos">
+      <div class="bg bg-quote"></div>
+      <div class="slide-inner">
+        <div class="gift-icon-wrap reveal">
+          <svg viewBox="0 0 24 24" class="gift-svg" aria-hidden="true"><use href="#ic-gift"/></svg>
+        </div>
+        <p class="kicker reveal">Presentes</p>
+        <h3 class="gift-title reveal chars">Lluvia de Sobres</h3>
+        <p class="gift-text reveal">Tu presencia es mi mejor regalo. Pero si deseas hacerme un detalle, habrá un buzón de sobres donde podras dejarlo con mucho cariño.</p>
+        <div class="divider-gold-heart reveal">
+          <span class="d-line"></span>
+          <span class="d-heart">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-heart"/></svg>
+          </span>
+          <span class="d-line"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 8.5 · PUNTUALIDAD / UN DÍA PERFECTO ============ -->
+    <section class="slide slide-punctual" id="puntualidad">
+      <div class="bg bg-present"></div>
+      <div class="slide-inner">
+        <div class="punctual-icon-wrap reveal">
+          <svg viewBox="0 0 24 24" class="punctual-svg" aria-hidden="true"><use href="#ic-clock"/></svg>
+        </div>
+        <p class="kicker reveal">Un Detalle Especial</p>
+        <h3 class="punctual-title reveal chars">Tu Puntualidad</h3>
+        
+        <div class="divider-gold-heart reveal">
+          <span class="d-line"></span>
+          <span class="d-heart">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-heart"/></svg>
+          </span>
+          <span class="d-line"></span>
+        </div>
+
+        <p class="punctual-text reveal">Cada momento ha sido preparado con mucho amor e ilusión.<br><strong>Tu puntualidad</strong> es el mejor regalo para que la magia comience a tiempo y vivamos juntos un día verdaderamente perfecto.</p>
+        
+        <p class="punctual-badge reveal">✨ Agradecemos llegar con 15 minutos de anticipación ✨</p>
+      </div>
+    </section>
+
+    <!-- ============ 9 · CIERRE / CONFIRMACIÓN (RSVP) ============ -->
+    <section class="slide slide-rsvp" id="rsvp">
+      <div class="bg bg-rsvp"></div>
+      <div class="slide-inner">
+        <img class="fly fly-hero" src="assets/mariposa.png" alt="">
+        <p class="rsvp-big reveal chars">¡Te esperamos!</p>
+        <div class="divider-gold-heart reveal">
+          <span class="d-line"></span>
+          <span class="d-heart">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-heart"/></svg>
+          </span>
+          <span class="d-line"></span>
+        </div>
+        <p class="rsvp-line reveal">Confirma tu asistencia</p>
+
+        <!-- Dos botones de confirmación -->
+        <div class="rsvp-buttons reveal">
+          <!-- Botón 1: Sí asistiré -->
+          <a class="btn-rsvp btn-confirm" href="https://wa.me/593987886279?text=Hola%2C%20confirmo%20con%20mucha%20alegr%C3%ADa%20mi%20asistencia%20a%20los%20XV%20a%C3%B1os%20de%20Aidee%20Samay%20%E2%9C%A8" target="_blank" rel="noopener">
+            <svg class="rsvp-btn-ic" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-check"/></svg>
+            <div class="btn-rsvp-text">
+              <span class="btn-main-txt">¡Sí asistiré!</span>
+              <small class="btn-sub-txt">Confirmar por WhatsApp</small>
+            </div>
+          </a>
+
+          <!-- Botón 2: No podré asistir -->
+          <a class="btn-rsvp btn-decline" href="https://wa.me/593987886279?text=Hola%2C%20lamentablemente%20no%20podr%C3%A9%20asistir%20a%20los%20XV%20a%C3%B1os%20de%20Aidee%20Samay%2C%20les%20deseo%20lo%20mejor%20en%20su%20celebraci%C3%B3n%20%E2%9C%A8" target="_blank" rel="noopener">
+            <svg class="rsvp-btn-ic" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-cross"/></svg>
+            <div class="btn-rsvp-text">
+              <span class="btn-main-txt">No podré asistir</span>
+              <small class="btn-sub-txt">Avisar con cariño</small>
+            </div>
+          </a>
+        </div>
+
+        <p class="rsvp-note reveal">¡Tu presencia será el mejor regalo!</p>
+      </div>
+    </section>
+
+    <!-- ============ PIE DE PÁGINA ============ -->
+    <footer class="foot">
+      <p>Aidee Samay Erazo Guato · XV Años</p>
+      <p>Hecho con amor</p>
+    </footer>
+  </main>
+
+  <!-- ============ PÉTALOS CAYENDO ============ -->
+  <div class="petal-field" id="petalField" aria-hidden="true"></div>
+
+  <!-- ============ BOTÓN DE MÚSICA FLOTANTE ============ -->
+  <button class="music-btn" id="musicBtn" aria-label="Activar o pausar la música" aria-pressed="false">
+    <svg class="mb-note" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-music"/></svg>
+  </button>
+  <audio id="musicPlayer" src="assets/musica.mp3?v=7" loop preload="none"></audio>
+
+  <!-- ============ SPRITES SVG ============ -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+    <symbol id="ic-heart" viewBox="0 0 24 24">
+      <path d="M12 21s-7.5-4.7-10-9.2C.5 8.6 2.4 4.5 6.4 4.5c2.2 0 4 1.3 5.6 3.3 1.6-2 3.4-3.3 5.6-3.3 4 0 5.9 4.1 4.4 7.3C19.5 16.3 12 21 12 21z" fill="url(#roseGrad)"/>
+      <defs>
+        <linearGradient id="roseGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#f3a4bb"/>
+          <stop offset="1" stop-color="#d76a8e"/>
+        </linearGradient>
+      </defs>
+    </symbol>
+
+    <symbol id="ic-whatsapp" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm5.6 14.1c-.2.7-1.3 1.3-1.9 1.4-.5.1-1.1.2-3.6-.8-3-1.2-5-4.2-5.2-4.4-.2-.2-1.2-1.7-1.2-3.2s.8-2.2 1-2.5c.3-.3.6-.4.8-.4h.6c.2 0 .4 0 .7.5s.8 2 .9 2.1c.1.1.1.3 0 .5-.1.2-.2.3-.4.5l-.5.6c-.2.2-.3.3-.1.6.2.3.8 1.4 1.8 2.3 1.3 1.2 2.4 1.5 2.7 1.7.3.1.5.1.7-.1l1-1.2c.2-.3.4-.2.7-.1l2.1 1c.3.2.5.3.6.4.1.2.1.7-.1 1.2z"/>
+    </symbol>
+
+    <symbol id="ic-music" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <path d="M9 18V6l10-2v11"/>
+        <circle cx="7" cy="18" r="2.4" fill="currentColor" stroke="none"/>
+        <circle cx="17" cy="15" r="2.4" fill="currentColor" stroke="none"/>
+      </g>
+    </symbol>
+
+    <symbol id="ic-gift" viewBox="0 0 24 24">
+      <path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M20 12v10H4V12M2 7h20v5H2zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zm0 0h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+    </symbol>
+
+    <symbol id="ic-clock" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"/>
+        <polyline points="12 7 12 12 15 14"/>
+      </g>
+    </symbol>
+
+    <symbol id="ic-check" viewBox="0 0 24 24">
+      <path fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M20 6L9 17l-5-5"/>
+    </symbol>
+
+    <symbol id="ic-cross" viewBox="0 0 24 24">
+      <path fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M18 6L6 18M6 6l12 12"/>
+    </symbol>
+  </svg>
+
+  <script src="app.js?v=7"></script>
+</body>
+</html>
