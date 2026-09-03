@@ -1,7 +1,7 @@
 /* ============================================================
    XV Años · Aidee Samay Erazo Guato
    Lógica interactiva: Sobre, video optimizado, fade-in de música,
-   gestión de segundo plano (pausa al minimizar) y animaciones fluidas
+   desbloqueo de audio con gesto de usuario y pausa en segundo plano
    ============================================================ */
 (function () {
   "use strict";
@@ -31,15 +31,20 @@
     targetVol = targetVol || 1.0;
     durationMs = durationMs || 2200;
     clearInterval(fadeInterval);
-    player.volume = 0;
-    var p = player.play();
-    if (p && p.catch) {
-      p.catch(function () {
-        isPlaying = false;
-        musicBtn.classList.remove("playing");
-        musicBtn.setAttribute("aria-pressed", "false");
-      });
+    
+    // Asegurar reproducción
+    if (player.paused) {
+      player.volume = 0;
+      var p = player.play();
+      if (p && p.catch) {
+        p.catch(function () {
+          isPlaying = false;
+          musicBtn.classList.remove("playing");
+          musicBtn.setAttribute("aria-pressed", "false");
+        });
+      }
     }
+    
     isPlaying = true;
     musicBtn.classList.add("playing");
     musicBtn.setAttribute("aria-pressed", "true");
@@ -79,7 +84,7 @@
     }
   });
 
-  /* ---------- Control de Segundo Plano (Pausa al cambiar de ventana o cerrar móvil) ---------- */
+  /* ---------- Control de Segundo Plano (Pausa al cambiar de ventana o minimizar) ---------- */
   function handleVisibilityChange() {
     if (document.hidden) {
       if (isPlaying) {
@@ -105,12 +110,12 @@
     }
   });
 
-  /* ---------- Cierre Seguro del Intro ---------- */
+  /* ---------- Cierre Seguro del Intro e Inicio Inmediato de Música ---------- */
   function closeIntro() {
     if (introClosed) return;
     introClosed = true;
 
-    // Liberar el video de la GPU del teléfono móvil
+    // Liberar memoria del reproductor de video
     if (introVideoEl) {
       introVideoEl.pause();
       try {
@@ -124,37 +129,20 @@
       intro.classList.add("closed");
       document.body.style.overflow = "";
 
-      // Iniciar la música suavemente
+      // Iniciar la música automáticamente (ya autorizada por el toque inicial)
       startMusic();
 
-      // Iniciar los pétalos SOLO después de que el video / intro termine para máxima fluidez
+      // Iniciar los pétalos
       startPetals();
 
       try {
         sessionStorage.setItem("xv_intro_opened", "1");
       } catch (e) {}
-    }, 380);
+    }, 340);
   }
 
-  /* ---------- Reproductor de Video Robusto con Watchdog ---------- */
-  function playIntroVideo() {
-    var videoOk = introVideoEl && introVideoEl.src && introVideoEl.getAttribute("src");
-    if (!videoOk) {
-      closeIntro();
-      return;
-    }
-
-    introVideo.classList.add("show");
-    introVideoEl.muted = true; // Garantiza reproducción instantánea en cualquier procesador móvil
-
-    var p = introVideoEl.play();
-    if (p && p.catch) {
-      p.catch(function () {
-        // Fallback si el dispositivo bloquea reproducción de video
-        setTimeout(closeIntro, 400);
-      });
-    }
-
+  /* ---------- Watchdog y Manejadores de Video ---------- */
+  function setupVideoWatchdog() {
     var handled = false;
     function finishVideo() {
       if (handled) return;
@@ -163,46 +151,73 @@
       setTimeout(function () {
         closeIntro();
         introVideo.classList.remove("show", "fade");
-      }, 400);
+      }, 350);
     }
 
-    // 1. Evento natural de fin de video
-    introVideoEl.addEventListener("ended", finishVideo, { once: true });
-    introVideoEl.addEventListener("error", finishVideo, { once: true });
-
-    // 2. Monitoreo de progreso en tiempo real (evita congelamiento si no dispara 'ended')
-    introVideoEl.addEventListener("timeupdate", function () {
-      if (introVideoEl.duration && introVideoEl.currentTime >= (introVideoEl.duration - 0.35)) {
-        finishVideo();
-      }
-    });
-
-    // 3. Temporizador de seguridad máximo (Watchdog Timer)
-    var safetyTimeout = setTimeout(function () {
-      finishVideo();
-    }, 8500);
-
-    // 4. Permitir saltar el video tocando la pantalla o el botón 'Saltar'
-    if (introVideoSkip) {
-      introVideoSkip.addEventListener("click", function (e) {
-        e.stopPropagation();
-        clearTimeout(safetyTimeout);
-        finishVideo();
+    if (introVideoEl) {
+      introVideoEl.addEventListener("ended", finishVideo, { once: true });
+      introVideoEl.addEventListener("error", finishVideo, { once: true });
+      introVideoEl.addEventListener("timeupdate", function () {
+        if (introVideoEl.duration && introVideoEl.currentTime >= (introVideoEl.duration - 0.3)) {
+          finishVideo();
+        }
       });
     }
 
-    introVideo.addEventListener("click", function () {
-      clearTimeout(safetyTimeout);
+    // Temporizador de seguridad (Watchdog: máx 7 segundos)
+    var safetyTimer = setTimeout(finishVideo, 7000);
+
+    // Botón Saltar o toque en pantalla
+    if (introVideoSkip) {
+      introVideoSkip.onclick = function (e) {
+        e.stopPropagation();
+        clearTimeout(safetyTimer);
+        finishVideo();
+      };
+    }
+
+    introVideo.onclick = function () {
+      clearTimeout(safetyTimer);
       finishVideo();
-    });
+    };
   }
 
+  /* ---------- Apertura del Sobre con Desbloqueo de Audio Inmediato ---------- */
   function openEnvelope() {
     if (envelope.classList.contains("open")) {
       return;
     }
     envelope.classList.add("open");
-    setTimeout(playIntroVideo, 800);
+
+    // 1. DESBLOQUEO INMEDIATO DEL AUDIO CON EL GESTO DEL USUARIO
+    // Esto autoriza a player.play() para que cuando el video acabe suene automáticamente sin ser bloqueado por Chrome/Safari
+    if (player) {
+      player.volume = 0;
+      var unlockP = player.play();
+      if (unlockP && unlockP.catch) {
+        unlockP.catch(function () {});
+      }
+    }
+
+    // 2. INICIAR EL VIDEO DIRECTAMENTE DENTRO DEL GESTO
+    if (introVideoEl) {
+      introVideoEl.muted = true;
+      introVideoEl.currentTime = 0;
+      var vP = introVideoEl.play();
+      if (vP && vP.catch) {
+        vP.catch(function () {});
+      }
+    }
+
+    // Mostrar el contenedor de video en sincronía con la animación del sobre
+    setTimeout(function () {
+      if (!introClosed) {
+        introVideo.classList.add("show");
+      }
+    }, 450);
+
+    // Activar vigilancia de video
+    setupVideoWatchdog();
   }
 
   if (opened) {
