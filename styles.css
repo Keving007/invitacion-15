@@ -98,7 +98,7 @@ a, button {
   justify-content: center;
   gap: 34px;
   background: radial-gradient(120% 90% at 50% 0%, var(--rose-100) 0%, var(--rose-200) 45%, var(--rose-400) 130%);
-  transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .intro.closed {
@@ -277,7 +277,9 @@ a, button {
   50% { opacity: 1; transform: translateY(-4px); }
 }
 
-/* Video contenedor con fondo Rosa Palo / Blush para eliminar bordes negros */
+/* ============================================================
+   VIDEO INTRO (OPTIMIZADO PARA MÓVILES)
+   ============================================================ */
 .intro-video {
   position: absolute;
   inset: 0;
@@ -286,6 +288,7 @@ a, button {
   align-items: center;
   justify-content: center;
   background: radial-gradient(120% 90% at 50% 0%, var(--rose-100) 0%, var(--rose-200) 45%, var(--rose-400) 130%);
+  cursor: pointer;
 }
 
 .intro-video video {
@@ -294,6 +297,7 @@ a, button {
   max-width: var(--maxw);
   object-fit: contain;
   filter: drop-shadow(0 10px 30px rgba(107, 52, 72, 0.2));
+  transform: translateZ(0);
 }
 
 .intro-video.show {
@@ -302,7 +306,46 @@ a, button {
 
 .intro-video.fade {
   opacity: 0;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.4s ease;
+}
+
+/* Botón flotante para saltar el video */
+.intro-video-skip {
+  position: absolute;
+  top: max(20px, env(safe-area-inset-top, 20px));
+  right: 18px;
+  z-index: 25;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--gold-300);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--rose-900);
+  box-shadow: 0 4px 14px rgba(107, 52, 72, 0.2);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.4s ease, transform 0.4s ease, background 0.2s ease;
+  pointer-events: none;
+}
+
+.intro-video.show .intro-video-skip {
+  opacity: 0.95;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition-delay: 0.8s;
+}
+
+.intro-video-skip:hover,
+.intro-video-skip:active {
+  background: #fff;
+  transform: scale(1.04);
 }
 
 /* ============================================================
@@ -631,6 +674,7 @@ a, button {
 .family-card {
   background: linear-gradient(160deg, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.6));
   backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   border: 1px solid var(--gold-200);
   border-radius: 20px;
   padding: 24px 20px 22px;
@@ -868,6 +912,7 @@ a, button {
   flex: 1;
   background: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   border: 1px solid var(--gold-200);
   border-radius: 14px;
   padding: 12px 4px 10px;
@@ -924,6 +969,7 @@ a, button {
   margin-bottom: 20px;
   background: linear-gradient(160deg, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.58));
   backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   border: 1px solid var(--gold-200);
   border-radius: 18px;
   padding: 26px 22px;
@@ -1126,6 +1172,7 @@ a, button {
   background: rgba(255, 255, 255, 0.75);
   border: 1px solid var(--gold-200);
   backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   box-shadow: 0 4px 14px rgba(107, 52, 72, 0.08);
 }
 
@@ -1234,6 +1281,7 @@ a, button {
 .btn-decline {
   background: rgba(255, 255, 255, 0.16);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1.5px solid rgba(255, 255, 255, 0.45);
   color: #fff;
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
@@ -1300,6 +1348,7 @@ a, button {
   z-index: 5;
   pointer-events: none;
   overflow: hidden;
+  will-change: transform;
 }
 
 .sparkle-field::before {
@@ -1319,6 +1368,7 @@ a, button {
     radial-gradient(2px 2px at 92% 48%, rgba(212, 175, 55, 0.55) 50%, transparent 51%);
   background-size: 560px 560px;
   animation: sparkleDrift 9s linear infinite;
+  transform: translateZ(0);
 }
 
 @keyframes sparkleDrift {
@@ -1339,6 +1389,7 @@ a, button {
   height: 44px;
   opacity: 0.8;
   filter: drop-shadow(0 4px 8px rgba(107, 52, 72, 0.25));
+  will-change: transform;
 }
 
 .fly-1 { top: 18%; left: 8%; animation: flyPath1 16s ease-in-out infinite; }
@@ -1346,25 +1397,25 @@ a, button {
 .fly-3 { top: 38%; left: 88%; width: 30px; height: 30px; animation: flyPath3 24s ease-in-out infinite; }
 
 @keyframes flyPath1 {
-  0% { transform: translate(0, 0) rotate(0deg); }
-  25% { transform: translate(40px, -30px) rotate(8deg); }
-  50% { transform: translate(-20px, 60px) rotate(-6deg); }
-  75% { transform: translate(30px, -10px) rotate(5deg); }
-  100% { transform: translate(0, 0) rotate(0deg); }
+  0% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  25% { transform: translate3d(40px, -30px, 0) rotate(8deg); }
+  50% { transform: translate3d(-20px, 60px, 0) rotate(-6deg); }
+  75% { transform: translate3d(30px, -10px, 0) rotate(5deg); }
+  100% { transform: translate3d(0, 0, 0) rotate(0deg); }
 }
 
 @keyframes flyPath2 {
-  0% { transform: translate(0, 0) rotate(0deg); }
-  33% { transform: translate(-46px, 40px) rotate(-10deg); }
-  66% { transform: translate(24px, -46px) rotate(8deg); }
-  100% { transform: translate(0, 0) rotate(0deg); }
+  0% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  33% { transform: translate3d(-46px, 40px, 0) rotate(-10deg); }
+  66% { transform: translate3d(24px, -46px, 0) rotate(8deg); }
+  100% { transform: translate3d(0, 0, 0) rotate(0deg); }
 }
 
 @keyframes flyPath3 {
-  0% { transform: translate(0, 0) rotate(0deg); }
-  30% { transform: translate(-30px, -50px) rotate(7deg); }
-  60% { transform: translate(40px, 30px) rotate(-8deg); }
-  100% { transform: translate(0, 0) rotate(0deg); }
+  0% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  30% { transform: translate3d(-30px, -50px, 0) rotate(7deg); }
+  60% { transform: translate3d(40px, 30px, 0) rotate(-8deg); }
+  100% { transform: translate3d(0, 0, 0) rotate(0deg); }
 }
 
 .fly svg, .fly img {
@@ -1428,6 +1479,7 @@ a, button {
   opacity: 0;
   transform: translateY(26px);
   transition: opacity 0.8s ease, transform 0.8s ease;
+  will-change: opacity, transform;
 }
 
 .reveal.in {
@@ -1469,7 +1521,7 @@ a, button {
 @keyframes chF { from { opacity: 0; transform: translateY(10px) rotate(6deg) scale(0.9); filter: blur(4px); } to { opacity: 1; transform: none; filter: none; } }
 
 /* ============================================================
-   LLUVIA DE PÉTALOS
+   LLUVIA DE PÉTALOS (ACELERADA POR HARDWARE)
    ============================================================ */
 .petal-field {
   position: fixed;
@@ -1483,21 +1535,23 @@ a, button {
   position: absolute;
   top: -40px;
   border-radius: 100% 15% 100% 15%;
-  box-shadow: inset -3px -4px 6px rgba(120, 40, 70, 0.18), 0 2px 4px rgba(120, 40, 70, 0.12);
+  box-shadow: 0 2px 4px rgba(120, 40, 70, 0.12);
   will-change: transform;
   animation: petalFall linear infinite;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 @keyframes petalFall {
-  0% { transform: translate(0, 0) rotate(0deg); }
-  12% { transform: translate(calc(var(--sway) * var(--tilt)), 13vh) rotate(38deg); }
-  25% { transform: translate(calc(var(--sway) * var(--tilt) * -0.4), 27vh) rotate(74deg); }
-  38% { transform: translate(calc(var(--sway) * var(--tilt)), 42vh) rotate(122deg); }
-  52% { transform: translate(calc(var(--sway) * var(--tilt) * -0.5), 57vh) rotate(176deg); }
-  65% { transform: translate(calc(var(--sway) * var(--tilt)), 71vh) rotate(230deg); }
-  80% { transform: translate(calc(var(--sway) * var(--tilt) * -0.35), 86vh) rotate(296deg); }
-  92% { transform: translate(calc(var(--sway) * var(--tilt) * 0.6), 98vh) rotate(344deg); }
-  100% { transform: translate(calc(var(--sway) * var(--tilt)), 110vh) rotate(400deg); }
+  0% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  12% { transform: translate3d(calc(var(--sway) * var(--tilt)), 13vh, 0) rotate(38deg); }
+  25% { transform: translate3d(calc(var(--sway) * var(--tilt) * -0.4), 27vh, 0) rotate(74deg); }
+  38% { transform: translate3d(calc(var(--sway) * var(--tilt)), 42vh, 0) rotate(122deg); }
+  52% { transform: translate3d(calc(var(--sway) * var(--tilt) * -0.5), 57vh, 0) rotate(176deg); }
+  65% { transform: translate3d(calc(var(--sway) * var(--tilt)), 71vh, 0) rotate(230deg); }
+  80% { transform: translate3d(calc(var(--sway) * var(--tilt) * -0.35), 86vh, 0) rotate(296deg); }
+  92% { transform: translate3d(calc(var(--sway) * var(--tilt) * 0.6), 98vh, 0) rotate(344deg); }
+  100% { transform: translate3d(calc(var(--sway) * var(--tilt)), 110vh, 0) rotate(400deg); }
 }
 
 /* ============================================================

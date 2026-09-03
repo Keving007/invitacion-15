@@ -1,7 +1,7 @@
 /* ============================================================
    XV Años · Aidee Samay Erazo Guato
-   Lógica interactiva: Sobre, música con fade-in posterior al video,
-   contador regresivo, lluvia de pétalos y animaciones de scroll
+   Lógica interactiva: Sobre, video optimizado, fade-in de música,
+   gestión de segundo plano (pausa al minimizar) y animaciones fluidas
    ============================================================ */
 (function () {
   "use strict";
@@ -11,21 +11,25 @@
   var envelope = document.getElementById("envelope");
   var introVideo = document.getElementById("introVideo");
   var introVideoEl = document.getElementById("introVideoEl");
+  var introVideoSkip = document.getElementById("introVideoSkip");
   var opened = false;
+  var introClosed = false;
+
   try {
     opened = sessionStorage.getItem("xv_intro_opened");
   } catch (e) {}
 
-  /* ---------- Control de Música con Fade-In Suave ---------- */
+  /* ---------- Control de Música ---------- */
   var musicBtn = document.getElementById("musicBtn");
   var player = document.getElementById("musicPlayer");
   var isPlaying = false;
+  var wasPlayingBeforeHide = false;
   var fadeInterval = null;
 
   function fadeInMusic(targetVol, durationMs) {
     if (!player) return;
     targetVol = targetVol || 1.0;
-    durationMs = durationMs || 2500;
+    durationMs = durationMs || 2200;
     clearInterval(fadeInterval);
     player.volume = 0;
     var p = player.play();
@@ -54,7 +58,7 @@
 
   function startMusic() {
     if (isPlaying) return;
-    fadeInMusic(1.0, 2500);
+    fadeInMusic(1.0, 2200);
   }
 
   function pauseMusic() {
@@ -62,7 +66,9 @@
     isPlaying = false;
     musicBtn.classList.remove("playing");
     musicBtn.setAttribute("aria-pressed", "false");
-    player.pause();
+    if (player) {
+      player.pause();
+    }
   }
 
   musicBtn.addEventListener("click", function () {
@@ -73,48 +79,122 @@
     }
   });
 
+  /* ---------- Control de Segundo Plano (Pausa al cambiar de ventana o cerrar móvil) ---------- */
+  function handleVisibilityChange() {
+    if (document.hidden) {
+      if (isPlaying) {
+        wasPlayingBeforeHide = true;
+        pauseMusic();
+      }
+    } else {
+      if (wasPlayingBeforeHide && introClosed) {
+        wasPlayingBeforeHide = false;
+        startMusic();
+      }
+    }
+  }
+
+  document.addEventListener("visibilitychange", handleVisibilityChange);
+  window.addEventListener("pagehide", function () {
+    pauseMusic();
+  });
+  window.addEventListener("blur", function () {
+    if (document.hidden && isPlaying) {
+      wasPlayingBeforeHide = true;
+      pauseMusic();
+    }
+  });
+
+  /* ---------- Cierre Seguro del Intro ---------- */
   function closeIntro() {
+    if (introClosed) return;
+    introClosed = true;
+
+    // Liberar el video de la GPU del teléfono móvil
+    if (introVideoEl) {
+      introVideoEl.pause();
+      try {
+        introVideoEl.removeAttribute("src");
+        introVideoEl.load();
+      } catch (e) {}
+    }
+
     envelope.classList.add("done");
     setTimeout(function () {
       intro.classList.add("closed");
       document.body.style.overflow = "";
-      // Iniciar la música DESPUÉS de que el video / sobre termine
+
+      // Iniciar la música suavemente
       startMusic();
+
+      // Iniciar los pétalos SOLO después de que el video / intro termine para máxima fluidez
+      startPetals();
+
       try {
         sessionStorage.setItem("xv_intro_opened", "1");
       } catch (e) {}
-    }, 420);
+    }, 380);
   }
 
+  /* ---------- Reproductor de Video Robusto con Watchdog ---------- */
   function playIntroVideo() {
     var videoOk = introVideoEl && introVideoEl.src && introVideoEl.getAttribute("src");
     if (!videoOk) {
       closeIntro();
       return;
     }
+
     introVideo.classList.add("show");
-    
-    // Reproducir el video
+    introVideoEl.muted = true; // Garantiza reproducción instantánea en cualquier procesador móvil
+
     var p = introVideoEl.play();
     if (p && p.catch) {
       p.catch(function () {
-        closeIntro();
+        // Fallback si el dispositivo bloquea reproducción de video
+        setTimeout(closeIntro, 400);
       });
     }
 
-    function onEnd() {
+    var handled = false;
+    function finishVideo() {
+      if (handled) return;
+      handled = true;
       introVideo.classList.add("fade");
       setTimeout(function () {
         closeIntro();
         introVideo.classList.remove("show", "fade");
-      }, 500);
+      }, 400);
     }
 
-    introVideoEl.addEventListener("ended", onEnd, { once: true });
-    introVideoEl.addEventListener("error", function () {
-      introVideo.classList.remove("show");
-      closeIntro();
-    }, { once: true });
+    // 1. Evento natural de fin de video
+    introVideoEl.addEventListener("ended", finishVideo, { once: true });
+    introVideoEl.addEventListener("error", finishVideo, { once: true });
+
+    // 2. Monitoreo de progreso en tiempo real (evita congelamiento si no dispara 'ended')
+    introVideoEl.addEventListener("timeupdate", function () {
+      if (introVideoEl.duration && introVideoEl.currentTime >= (introVideoEl.duration - 0.35)) {
+        finishVideo();
+      }
+    });
+
+    // 3. Temporizador de seguridad máximo (Watchdog Timer)
+    var safetyTimeout = setTimeout(function () {
+      finishVideo();
+    }, 8500);
+
+    // 4. Permitir saltar el video tocando la pantalla o el botón 'Saltar'
+    if (introVideoSkip) {
+      introVideoSkip.addEventListener("click", function (e) {
+        e.stopPropagation();
+        clearTimeout(safetyTimeout);
+        finishVideo();
+      });
+    }
+
+    introVideo.addEventListener("click", function () {
+      clearTimeout(safetyTimeout);
+      finishVideo();
+    });
   }
 
   function openEnvelope() {
@@ -122,13 +202,14 @@
       return;
     }
     envelope.classList.add("open");
-    // NO iniciamos música aquí para que no suene sobre el video
-    setTimeout(playIntroVideo, 900);
+    setTimeout(playIntroVideo, 800);
   }
 
   if (opened) {
+    introClosed = true;
     intro.classList.add("closed");
     document.body.style.overflow = "";
+    startPetals();
   } else {
     document.body.style.overflow = "hidden";
     envelope.addEventListener("click", openEnvelope);
@@ -150,7 +231,7 @@
           io.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.15 });
+    }, { threshold: 0.12 });
     revealEls.forEach(function (el) { io.observe(el); });
   } else {
     revealEls.forEach(function (el) { el.classList.add("in"); });
@@ -185,7 +266,7 @@
       });
     });
   }
-  var charTimer = setTimeout(splitChars, 1200);
+  var charTimer = setTimeout(splitChars, 1000);
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(function () {
       clearTimeout(charTimer);
@@ -193,7 +274,7 @@
     });
   }
 
-  /* ---------- Lluvia de Pétalos de Rosa ---------- */
+  /* ---------- Lluvia de Pétalos de Rosa Optimizada ---------- */
   var petalField = document.getElementById("petalField");
   var PETAL_GRADS = [
     ["#e9a7bb", "#c96a8f"],
@@ -203,37 +284,41 @@
     ["#f4d9c4", "#e6b48f"]
   ];
   var petalCount = 0;
+  var petalsRunning = false;
+  var maxPetals = (window.innerWidth < 600) ? 8 : 12;
 
   function spawnPetal(initial) {
+    if (!petalField) return;
     var p = document.createElement("span");
     p.className = "petal";
     var g = PETAL_GRADS[Math.floor(Math.random() * PETAL_GRADS.length)];
-    p.style.left = (Math.random() * 98) + "vw";
-    p.style.width = (10 + Math.random() * 10) + "px";
-    p.style.height = (14 + Math.random() * 12) + "px";
+    p.style.left = (Math.random() * 96) + "vw";
+    p.style.width = (10 + Math.random() * 8) + "px";
+    p.style.height = (14 + Math.random() * 10) + "px";
     p.style.background = "radial-gradient(120% 120% at 30% 25%, " + g[0] + " 0%, " + g[1] + " 78%)";
-    p.style.setProperty("--sway", (12 + Math.random() * 26).toFixed(0) + "px");
+    p.style.setProperty("--sway", (10 + Math.random() * 20).toFixed(0) + "px");
     p.style.setProperty("--tilt", (Math.random() > 0.5 ? -1 : 1));
-    var dur = 9 + Math.random() * 7;
+    var dur = 8 + Math.random() * 6;
     p.style.animationDuration = dur + "s";
-    if (initial) p.style.animationDelay = (-Math.random() * 9).toFixed(2) + "s";
+    if (initial) p.style.animationDelay = (-Math.random() * 8).toFixed(2) + "s";
     setTimeout(function () {
       if (p.parentNode) {
         petalField.removeChild(p);
         petalCount--;
       }
-    }, (dur + 10.5) * 1000);
+    }, (dur + 9) * 1000);
     petalField.appendChild(p);
     petalCount++;
   }
 
   function startPetals() {
-    for (var i = 0; i < 6; i++) spawnPetal(true);
+    if (petalsRunning || !petalField) return;
+    petalsRunning = true;
+    for (var i = 0; i < 4; i++) spawnPetal(true);
     setInterval(function () {
-      if (petalCount < 14) spawnPetal(false);
-    }, 1600);
+      if (!document.hidden && petalCount < maxPetals) spawnPetal(false);
+    }, 2000);
   }
-  if (petalField) startPetals();
 
   /* ---------- Cuenta Regresiva (Countdown) ---------- */
   var EVENT_DATE = new Date("2026-10-10T11:00:00").getTime();
