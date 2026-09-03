@@ -278,7 +278,7 @@ a, button {
 }
 
 /* ============================================================
-   VIDEO INTRO (OPTIMIZADO PARA MÓVILES)
+   VIDEO INTRO (OPTIMIZADO PARA MÓVILES CON SONIDO)
    ============================================================ */
 .intro-video {
   position: absolute;
@@ -339,7 +339,7 @@ a, button {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
-  transition-delay: 0.3s;
+  transition-delay: 0.2s;
 }
 
 .intro-video-skip:hover,
